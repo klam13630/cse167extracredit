@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>CSE 167 HW 4 Extra Credit</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main>
+      <h1>CSE 167 HW 4 Extra Credit - WI 23</h1>
+      <table>
+        <caption>
+          <h2>Depth of Field (and Refraction)</h2>
+          <span><b>Depth of Field usage: dof [focal_dist] [arpeture_size]</b></span>
+          <br>
+          <span><b>Refraction usage: refractive [index_of_refracton]</b></span>
+        </caption>
+        <colgroup>
+          <col span="1" class="line">
+          <col span="1" class="figure">
+        </colgroup>
+        <tr>
+          <td>
+            <figure>
+              <img src="dofDist28Arp01.png" alt="five glass balls on blue bg with central one in focus" width="600">
+              <figcaption>Focal distance: 2.8, arpeture size: 0.1</figcaption>
+            </figure>
+          </td>
+          <td>
+            <figure>
+              <img src="dofDist28Arp005.png" alt="five glass balls on blue bg with central one in focus" width="600">
+              <figcaption>Focal distance: 2.8, arpeture size: 0.05</figcaption>
+            </figure>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <figure>
+              <img src="dofDist53Arp01.png"  alt="five glass balls on blue bg with back ones in focus" width="600">
+              <figcaption>Focal distance: 5.3, arpeture size: 0.1</figcaption>
+            </figure>
+          </td>
+          <td>
+            <img src="dofDist53Arp005.png" alt="five glass balls on blue bg with back ones in focus" width="600">
+            <figcaption>Focal distance: 5.3, arpeture size: 0.05</figcaption>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <figure>
+              <img src="refr15.png"  alt="five glass balls on blue bg with back ones in focus" width="600">
+              <figcaption>Refractive index 1.5 (glass), no depth of field</figcaption>
+            </figure>
+          </td>
+          <td>
+            <img src="refr.png" alt="four balls lined up against a wall with one in the foreground" width="600">
+            <figcaption>From left to right, back to front: refractivity 1, 1.25, 1.5, 1.75, 2.0 diffuse: 1 0 0, 0 1 0, 0 0 1, 0 0 0, 0 0 0</figcaption>
+          </td>
+        </tr>
+      </table>
+      <section>
+        <h3>Description</h3>
+        <ul>
+          <li>
+            In order to implement depth of field, I take the ray from the original generateRay() function and modify it slightly to take aim at the focal distance defined by the input by using the equation o + fd. 
+          </li>
+          <li>
+          I then shoot 20 rays, shifting the origin of the new ray by generating a unit vector and multiplying it by the arpeture size, then adding that to the eye position. I subtract that new position from the direction generation previously, and fire the rays as normal, averaging the colors produced by the 20 rays. 
+          </li>
+          <li>
+          A small issue I have, as seen in the above images, is that the images are oddly noisy around the edges of objects, particularly with larger arpeture sizes. Overall, though, I think they look fairly good.
+          </li>
+          <li>
+          I implemented refractions using the standard equaion for them; flipping the normal if inside sphere, internal reflections, etc. To calculate what proportion of the lighting was from reflection vs refraction, I used the fresnel equations. One slightly mixup I had there was confusing which one corresponded to reflection vs refraction, which caused it to just look like a normal somewhat reflective sphere, but I figured it out.
+          </li>
+        </section>
+      </ul>
+      <table>
+        <caption>
+          <h2>Soft Shadows</h2>
+          <span><b>Spherical area light usage: spherical [x] [y] [z] [radius]</b></span>
+          <br>
+        </caption>
+        <colgroup>
+          <col span="1" class="line">
+          <col span="1" class="figure">
+        </colgroup>
+        <tr>
+          <td>
+            <figure>
+              <img src="rad01rand.png" alt="cornell box with soft shadows" width="600">
+              <figcaption>Soft shadow, light radius = 0.1</figcaption>
+            </figure>
+          </td>
+          <td>
+            <figure>
+              <img src="rad05rand.png" alt="cornell box with hard shadows" width="600">
+              <figcaption>Soft shadow, light radius = 0.5</figcaption>
+            </figure>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <figure>
+              <img src="rad01noRand.png"  alt="cornell box with soft shadows, no noise" width="600">
+              <figcaption>Soft shadow, light radius = 0.1, no rotation of blue noise</figcaption>
+            </figure>
+          </td>
+          <td>
+            <img src="rad05noRand.png" alt="cornell box with soft shadows, no noise, rad = 0.5" width="600">
+            <figcaption>Soft shadow, light radius = 0.5, no rotation of blue noise</figcaption>
+          </td>
+        </tr>
+      </table>
+      <section>
+      <h3> Description </h3>
+        <ul>
+          <li>I implemented soft shadows using a set of 64 randomly generated blue noise vectors generated using<a href="bluenoise.py">bluenoise.py</a>; in the top set of images I randomly scatter the blue noise points in order to make them look less linear, but it makes it super noisy instead, which I'm not sure is much better.</li>
+          <li>In the bottom set of images, I only use the blue noise, which creaters much neater penumbras, at the cost of looking very linear.</li>
+          <li>I chose to do a spherical area light because frankly that seemed simpler to me.</li>
+          <li>Notably, with larger radius spherical lights, the shadow in the back almost disappears.</li>
+        </ul>
+      </section>
+    </main>
+    <br>
+    <hr>
+    <br>
+    <footer>Note: it is inadvisable to have something with both depth of field and soft shadows using my raytracer because I did not implement an acceleration structure like Octree.</footer>
+    <span>Made by: Kevin Lam</span> 
+    <br>
+    <span>PID: A15941636</span>
+  </body>
+</html>
